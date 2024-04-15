@@ -115,5 +115,5 @@ class Game:
         self.initial_platforms()
         self.clouds = self.init_clouds()
 
-if __name__ == "__main__":
-    Game()
+
+Game()
