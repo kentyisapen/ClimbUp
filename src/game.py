@@ -15,7 +15,7 @@ class Game:
         self.player_x = 72
         self.player_y = 88
         self.direction = 'right'
-        self.score = 100
+        self.score = 0
         self.game_over = False
         self.start_time = time.time()  # ゲーム開始時のタイムスタンプ
         self.time_limit = 30  # 制限時間を秒で設定
