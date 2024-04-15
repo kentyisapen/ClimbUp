@@ -4,7 +4,7 @@ import random
 class Game:
     def __init__(self):
         pyxel.init(160, 120, title="Climb Up")
-        pyxel.load("assets/pixels.pyxres")
+        pyxel.load("../assets/pixels.pyxres")
 
         self.player_x = 72
         self.player_y = 88
