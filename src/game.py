@@ -1,5 +1,6 @@
 import pyxel
 import random
+import time 
 
 class Game:
     def __init__(self):
@@ -11,6 +12,8 @@ class Game:
         self.direction = 'right'
         self.score = 0
         self.game_over = False
+        self.start_time = time.time()  # ゲーム開始時のタイムスタンプ
+        self.time_limit = 30  # 制限時間を秒で設定
 
         self.platforms = [(self.player_x, self.player_y + 16)]
         self.initial_platforms()
@@ -48,6 +51,8 @@ class Game:
                 self.reset_game()
             return
 
+        self.check_time_limit()
+
         if pyxel.btnp(pyxel.KEY_SPACE):
             self.direction = 'left' if self.direction == 'right' else 'right'
 
@@ -56,13 +61,16 @@ class Game:
                 self.climb()
             else:
                 self.game_over = True
+                self.end_time = time.time()
 
     def draw(self):
         pyxel.cls(6)
         for cloud_x, cloud_y in self.clouds:
             pyxel.blt(cloud_x, cloud_y, 0, 0, 48, 16, 16, pyxel.COLOR_YELLOW)
             pyxel.blt(cloud_x + 16, cloud_y, 0, 0, 48, -16, 16, pyxel.COLOR_YELLOW)
-
+        elapsed_time = int(time.time() - self.start_time)
+        remaining_time = max(0, self.time_limit - elapsed_time)
+        pyxel.text(130, 5, f"Time: {remaining_time}", pyxel.COLOR_BLACK)
         for x, y in self.platforms:
             pyxel.blt(x, y, 0, 32, 0, 16, 16, 6)
 
@@ -76,6 +84,17 @@ class Game:
             pyxel.blt(self.player_x, self.player_y, 0, 0, 0, sprite_w , 16)
 
         pyxel.text(5, 5, f"Score: {self.score}", pyxel.COLOR_BLACK)
+        current_time = self.end_time if self.game_over else time.time()
+        elapsed_time = int(current_time - self.start_time)
+        remaining_time = max(0, self.time_limit - elapsed_time)
+        pyxel.text(130, 5, f"Time: {remaining_time}", pyxel.COLOR_BLACK)
+
+    def check_time_limit(self):
+        elapsed_time = time.time() - self.start_time
+        if elapsed_time > self.time_limit and not self.game_over:
+            self.game_over = True
+            self.end_time = time.time()  # タイムアップ時のタイムスタンプを記録
+
 
     def can_climb(self):
         next_x = self.player_x + (16 if self.direction == 'right' else -16)
@@ -111,6 +130,8 @@ class Game:
         self.direction = 'right'
         self.score = 0
         self.game_over = False
+        self.start_time = time.time()
+        self.end_time = None
         self.platforms = [(self.player_x, self.player_y + 16)]
         self.initial_platforms()
         self.clouds = self.init_clouds()
