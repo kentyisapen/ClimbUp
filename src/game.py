@@ -68,9 +68,7 @@ class Game:
         for cloud_x, cloud_y in self.clouds:
             pyxel.blt(cloud_x, cloud_y, 0, 0, 48, 16, 16, pyxel.COLOR_YELLOW)
             pyxel.blt(cloud_x + 16, cloud_y, 0, 0, 48, -16, 16, pyxel.COLOR_YELLOW)
-        elapsed_time = int(time.time() - self.start_time)
-        remaining_time = max(0, self.time_limit - elapsed_time)
-        pyxel.text(130, 5, f"Time: {remaining_time}", pyxel.COLOR_BLACK)
+            
         for x, y in self.platforms:
             pyxel.blt(x, y, 0, 32, 0, 16, 16, 6)
 
@@ -87,7 +85,7 @@ class Game:
         current_time = self.end_time if self.game_over else time.time()
         elapsed_time = int(current_time - self.start_time)
         remaining_time = max(0, self.time_limit - elapsed_time)
-        pyxel.text(130, 5, f"Time: {remaining_time}", pyxel.COLOR_BLACK)
+        pyxel.text(120, 5, f"Time: {remaining_time}", pyxel.COLOR_BLACK)
 
     def check_time_limit(self):
         elapsed_time = time.time() - self.start_time
