@@ -20,7 +20,7 @@ class CloudManager:
         used_heights = []
         while len(clouds) < 4:
             new_cloud_x = random.randint(0, 140)
-            new_cloud_y = random.randint(0, 104)
+            new_cloud_y = 16 * random.randint(0, 6)  # 104 / 16 = 6.5, 四捨五入して6とする
             new_cloud_type = random.randint(0, 2)
             if new_cloud_y not in used_heights:
                 clouds.append((new_cloud_x, new_cloud_y, new_cloud_type))
