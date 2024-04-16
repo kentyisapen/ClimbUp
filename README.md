@@ -1,6 +1,6 @@
 # ClimbUp
 
-https://kitao.github.io/pyxel/wasm/launcher/?play=kentyisapen.ClimbUp./.2024-04-15-12-49
+https://kentyisapen.github.io/ClimbUp
 
 ## 操作方法
 
