@@ -26,8 +26,8 @@ class Game:
         self.player_manager = PlayerManager()
         self.platform_manager = PlatformManager()
         self.cloud_manager = CloudManager()
-        self.start_time = time.time()
         self.time_limit = 30
+        self.start_time = None
         self.end_time = None
         self.player_manager.reset()
         self.platform_manager.reset()
@@ -88,8 +88,14 @@ class Game:
 
     def draw_score_and_time(self):
         pyxel.text(5, 5, f"Score: {self.player_manager.score}", pyxel.COLOR_BLACK)
-        elapsed_time = int(time.time() - self.start_time) if not self.player_manager.game_over else int(self.end_time - self.start_time)
-        remaining_time = max(0, self.time_limit - elapsed_time)
+        if self.game_started and self.start_time:
+            if self.player_manager.game_over and self.end_time:
+                elapsed_time = int(self.end_time - self.start_time)
+            else:
+                elapsed_time = int(time.time() - self.start_time)
+            remaining_time = max(0, self.time_limit - elapsed_time)
+        else:
+            remaining_time = self.time_limit  # ゲーム開始前はタイムリミットを表示
         pyxel.text(120, 5, f"Time: {remaining_time}", pyxel.COLOR_BLACK)
 
     def check_time_limit(self):
