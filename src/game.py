@@ -7,7 +7,7 @@ from platform_manager import PlatformManager
 from player_manager import PlayerManager
 
 # 定数
-DAYTIME_COLOR = 6
+DAYTIME_COLOR = 12
 EVENING_COLOR = 15
 NIGHT_COLOR = 5
 MIDNIGHT_COLOR = 1
@@ -32,8 +32,15 @@ class Game:
         self.player_manager.reset()
         self.platform_manager.reset()
         self.cloud_manager.reset()
+        self.game_started = False
 
     def update(self):
+        if not self.game_started:
+            if pyxel.btnp(pyxel.KEY_RETURN):
+                self.start_time = time.time()
+                self.game_started = True
+            return
+
         if self.player_manager.game_over:
             if pyxel.btnp(pyxel.KEY_R):
                 self.reset_game()
@@ -41,20 +48,26 @@ class Game:
         self.update_game_logic()
 
     def update_game_logic(self):
-        self.check_time_limit()
+        if self.game_started:  # ゲームが開始されていればタイムリミットをチェック
+            self.check_time_limit()
+
         if pyxel.btnp(pyxel.KEY_SPACE):
             self.player_manager.toggle_direction()
+            self.climb_action()
         if pyxel.btnp(pyxel.KEY_RETURN):
-            if self.player_manager.can_climb(self.platform_manager.platforms):
-                self.platform_manager.update_platforms(self.player_manager.direction)
-                self.cloud_manager.update_clouds()
-                self.player_manager.score += 1
-            else:
-                self.player_manager.game_over = True
-                self.end_time = time.time()
+            self.climb_action()
 
     def toggle_direction(self):
         self.direction = 'left' if self.direction == 'right' else 'right'
+    
+    def climb_action(self):
+        if self.player_manager.can_climb(self.platform_manager.platforms):
+            self.platform_manager.update_platforms(self.player_manager.direction)
+            self.cloud_manager.update_clouds()
+            self.player_manager.score += 1
+        else:
+            self.player_manager.game_over = True
+            self.end_time = time.time()
 
     def draw(self):
         pyxel.cls(self.get_background_color())
@@ -67,6 +80,11 @@ class Game:
             pyxel.blt(self.player_manager.player_x, self.player_manager.player_y, 0, 16, 0, sprite_w, 16)
             pyxel.text(50, 50, "Game Over", pyxel.COLOR_BLACK)
             pyxel.text(50, 60, "Press 'R' to Restart", pyxel.COLOR_BLACK)
+        
+        if not self.game_started:
+            pyxel.text(50, 50, "turn : SPACE",pyxel.COLOR_BLACK)
+            pyxel.text(50, 60, "climb: ENTER",pyxel.COLOR_BLACK)
+            pyxel.text(50, 70, "Press Enter to start", pyxel.COLOR_BLACK)
 
     def draw_score_and_time(self):
         pyxel.text(5, 5, f"Score: {self.player_manager.score}", pyxel.COLOR_BLACK)
