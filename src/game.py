@@ -2,9 +2,7 @@ import pyxel
 import random
 import time
 
-from cloud_manager import CloudManager
-from platform_manager import PlatformManager
-from player_manager import PlayerManager
+from src import cloud_manager, platform_manager, player_manager
 
 # 定数
 DAYTIME_COLOR = 12
@@ -23,9 +21,9 @@ class Game:
         pyxel.load("../assets/pixels.pyxres")
 
     def reset_game(self):
-        self.player_manager = PlayerManager()
-        self.platform_manager = PlatformManager()
-        self.cloud_manager = CloudManager()
+        self.player_manager = player_manager.PlayerManager()
+        self.platform_manager = platform_manager.PlatformManager()
+        self.cloud_manager = cloud_manager.CloudManager()
         self.time_limit = 30
         self.start_time = None
         self.end_time = None
