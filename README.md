@@ -6,3 +6,7 @@ https://kentyisapen.github.io/ClimbUp
 
 - space: 左右反転
 - enter: 登る
+
+## build
+
+pyinstaller main.spec
